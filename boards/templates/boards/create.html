@@ -6,10 +6,7 @@
     <!--  POST /boards/create/  -->
     <form action="" method="post">
         {% csrf_token %}
-        <label for="title">Title</label><br />
-        <input type="text" id="title" name="title" /><br />
-        <label for="content">Content</label><br />
-        <textarea name="content" id="content"></textarea><br />
+        {{ form.as_p }}
         <input type="submit" value="작성하기">
     </form>
 {% endblock %}

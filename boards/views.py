@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Board
+from .forms import BoardForm
 
 
 # Board 의 리스트
@@ -10,15 +11,17 @@ def index(request):
 
 
 def create(request):
-    if request.method == 'GET':
-        return render(request, 'boards/create.html')
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
+            board = Board.objects.create(title=title, content=content)
+            return redirect('boards:detail', board.pk)
     else:
-        # Board 정보를 받아서 데이터베이스에 저장하는 로직
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        board = Board(title=title, content=content)
-        board.save()
-        return redirect('boards:index')
+        form = BoardForm()
+    context = {'form': form}
+    return render(request, 'boards/create.html', context)
 
 
 # boards/3/
