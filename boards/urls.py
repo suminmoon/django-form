@@ -7,5 +7,6 @@ app_name = 'boards'
 # boards/
 urlpatterns = [
     path('', views.index, name='index'),
+    path('<int:board_pk>/', views.detail, name='detail'),  # boards/3/
     path('create/', views.create, name='create'),
 ]
