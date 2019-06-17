@@ -13,5 +13,6 @@
         {% csrf_token %}
         <input type="submit" value="삭제하기" />
     </form>
+    <a href="{% url 'boards:update' board.pk %}">[수정하기]</a>
     <a href="{% url 'boards:index' %}">[뒤로가기]</a>
 {% endblock %}

@@ -9,6 +9,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<int:board_pk>/', views.detail, name='detail'),  # boards/3/
     path('create/', views.create, name='create'),
-    #  boards/3/delete/
     path('<int:board_pk>/delete/', views.delete, name='delete'),
+    path('<int:board_pk>/update/', views.update, name='update'),
 ]

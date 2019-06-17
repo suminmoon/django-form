@@ -24,7 +24,7 @@ def create(request):
     else:
         form = BoardForm()
     context = {'form': form}
-    return render(request, 'boards/create.html', context)
+    return render(request, 'boards/form.html', context)
 
 
 # boards/3/
@@ -42,3 +42,21 @@ def delete(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
     board.delete()
     return redirect('boards:index')
+
+
+@require_http_methods(['GET', 'POST'])
+def update(request, board_pk):
+    board = get_object_or_404(Board, pk=board_pk)
+    #  POST boards/3/update/
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board.title = form.cleaned_data.get('title')
+            board.content = form.cleaned_data.get('content')
+            board.save()
+            return redirect('boards:detail', board.pk)
+    #  GET boards/3/update/
+    else:
+        form = BoardForm(initial=board.__dict__)  # board 데이터 할당
+    context = {'form': form}
+    return render(request, 'boards/form.html', context)

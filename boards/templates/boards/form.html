@@ -1,9 +1,9 @@
 {% extends 'boards/base.html' %}
 
-<!--  GET /boards/create/  -->
+<!--  GET /boards/3/update/  -->
 {% block body %}
     <h1>새로운 게시글 작성</h1>
-    <!--  POST /boards/create/  -->
+    <!--  POST /boards/3/update/  -->
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
