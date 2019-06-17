@@ -1,0 +1,15 @@
+{% extends 'boards/base.html' %}
+
+<!--  GET /boards/create/  -->
+{% block body %}
+    <h1>새로운 게시글 작성</h1>
+    <!--  POST /boards/create/  -->
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="title">Title</label><br />
+        <input type="text" id="title" name="title" /><br />
+        <label for="content">Content</label><br />
+        <textarea name="content" id="content"></textarea><br />
+        <input type="submit" value="작성하기">
+    </form>
+{% endblock %}
