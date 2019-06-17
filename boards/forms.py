@@ -1,7 +1,9 @@
 from django import forms
+from .models import Board
 
 
-class BoardForm(forms.Form):
+class BoardForm(forms.ModelForm):
+    #  Form 에 대한 정보들 입력
     title = forms.CharField(
         max_length=20,
         label='제목',
@@ -23,3 +25,8 @@ class BoardForm(forms.Form):
             }
         )
     )
+
+    #  Model 의 대한 정보들 입력
+    class Meta:
+        model = Board
+        fields = ('title', 'content', )
