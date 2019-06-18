@@ -3,18 +3,39 @@
 {% block body %}
 
 <ul class="nav justify-content-end" >
-  <li class="nav-item">
-    <a class="nav-link" href="#">로그인</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">회원가입</a>
-  </li>
+    {% if user.is_authenticated %}
+    <!--로그인 상태일 때-->
+    <li class="nav-item">
+        <a href="{% url 'accounts:logout' %}" class="nav-link">로그아웃</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url 'accounts:update' %}" class="nav-link">MYPAGE</a>
+    </li>
+
+    {% else %}
+    <!--로그인 아닐 때-->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'accounts:signup' %}">회원가입</a>
+      </li>
+    {% endif %}
+
+
 
 </ul>
 
 <div class="jumbotron">
     <h1>게시글 목록</h1>
-    <a href="{% url 'boards:create' %}">[게시글 작성]</a>
+    <!--로그인 되었을 때만 밑에 로직 돌게 하기 -->
+    {% if user.is_authenticated %}
+        <h3>{{ user.username }}님 안녕하세요</h3>
+      <a href="{% url 'boards:create' %}">[게시글 작성]</a>
+    {% else %}
+    <p>새글을 쓰려면 <a href="{% url 'accounts:login' %}">로그인</a> 하세요.</p>
+    {% endif %}
+
 
 </div>
 
