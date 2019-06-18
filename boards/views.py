@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from .models import Board
 from .forms import BoardForm
-# from IPython import embed
 
 
 # Board 의 리스트
@@ -16,7 +15,6 @@ def index(request):
 @require_http_methods(['GET', 'POST'])
 def create(request):
     if request.method == 'POST':
-        # embed()
         form = BoardForm(request.POST)
         if form.is_valid():
             board = form.save()
