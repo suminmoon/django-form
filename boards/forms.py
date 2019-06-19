@@ -33,6 +33,8 @@ class BoardForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(label=False)
+
 
     class Meta:
         model = Comment
