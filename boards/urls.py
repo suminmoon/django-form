@@ -11,4 +11,11 @@ urlpatterns = [
     path('create/', views.create, name='create'),
     path('<int:board_pk>/delete/', views.delete, name='delete'),
     path('<int:board_pk>/update/', views.update, name='update'),
+
+
+    # comments
+    path('<int:board_pk>/comments/', views.comments_create, name='comments_create')
+
+
+
 ]

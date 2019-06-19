@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.contrib.auth.decorators import login_required
-from .models import Board
-from .forms import BoardForm
+from .models import Board, Comment
+from .forms import BoardForm, CommentForm
 
 
 # Board 의 리스트
@@ -32,7 +32,11 @@ def create(request):
 @require_GET
 def detail(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
-    context = {'board': board}
+    comment_form = CommentForm()
+    context = {
+        'board': board,
+        'comment_form': comment_form,
+    }
     return render(request, 'boards/detail.html', context)
 
 
@@ -67,3 +71,20 @@ def update(request, board_pk):
         'board_pk': board_pk,
     }
     return render(request, 'boards/form.html', context)
+
+
+@require_POST
+def comments_create(request, board_pk):
+    # 댓글 작성 로직
+    comment_form = CommentForm(request.POST)  # modelform 에 사용자 입력을 받음
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        # user 정보 할당
+        # board 정보 할당
+        # comment.save()
+        comment.user = request.user  # = comment.user_id = request.user_id / 인스턴스 할당, pk 할당 같은 역할
+        comment.board_pk = board_pk
+        comment.save()
+    return redirect('boards:detail', board_pk)
+
+

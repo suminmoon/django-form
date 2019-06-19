@@ -10,7 +10,8 @@ class BoardAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('content', )
+    list_display = ('content', 'created_at', )
+    readonly_fields = ['created_at', ]
 
 
 
