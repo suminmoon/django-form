@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST, require_GET, require_http
 from django.contrib.auth.decorators import login_required
 from .models import Board, Comment
 from .forms import BoardForm, CommentForm
+from django.contrib.auth import get_user_model
 
 
 # Board 의 리스트
@@ -35,10 +36,12 @@ def detail(request, board_pk):
     #  Board 를 참조하고 있는 모든 댓글
     comments = board.comment_set.order_by('-pk')
     comment_form = CommentForm()
+    person = get_object_or_404(get_user_model(), pk=board.user_id)
     context = {
         'board': board,
         'comment_form': comment_form,
         'comments': comments,
+        'person': person,
     }
     return render(request, 'boards/detail.html', context)
 
@@ -81,7 +84,7 @@ def update(request, board_pk):
 @require_POST
 def comments_create(request, board_pk):
     if not request.user.is_authenticated:
-        return redirect('accounts:login')
+        return redirect('boards:login')
     # 댓글 작성 로직
     comment_form = CommentForm(request.POST)  # modelform 에 사용자 입력을 받음
     if comment_form.is_valid():
@@ -103,6 +106,7 @@ def comments_delete(request, board_pk, comment_pk):
     return redirect('boards:detail', board_pk)
 
 
+@login_required
 def like(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
     user = request.user
@@ -111,4 +115,21 @@ def like(request, board_pk):
     else:
         board.like_users.add(user)
     return redirect('boards:detail', board_pk)
+
+
+@login_required
+def follow(request, board_pk, user_pk):
+    # 팔로우 기능 구현
+    user = request.user
+    person = get_object_or_404(get_user_model(), pk=user_pk)
+
+    if user != person:
+        # person 의 팔로워 목록에 user 가 없다면, 추가하기
+        # 팔로워 목록에 user 가 이미 존재 한다면, 제거하기
+        if user in person.followers.all():
+            person.followers.remove(user)
+        else:
+            person.followers.add(user)
+    return redirect('boards:detail', board_pk)
+
 

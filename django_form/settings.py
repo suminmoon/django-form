@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Application definition
 
@@ -37,6 +41,12 @@ INSTALLED_APPS = [
 
     # 3rd party apps
     'bootstrap4',
+    'allauth',  # new
+    'allauth.account',  # new
+    'allauth.socialaccount',  # new
+    'allauth.socialaccount.providers.kakao',  # new
+
+
 
     # django apps
     'django.contrib.admin',
@@ -45,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +140,5 @@ STATIC_URL = '/static/'
 
 # settings.AUTH_USER_MODEL
 AUTH_USER_MODEL = 'accounts.User'   # default 값 세팅?
+
+LOGIN_REDIRECT_URL = 'boards:index'

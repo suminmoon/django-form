@@ -4,9 +4,10 @@
 {% block body %}
     <h1>Detail</h1>
     <hr />
+        <!--_profile.html 이식-->
+    {% include 'boards/_profile.html' %}
     <p>글 번호: {{ board.pk }}</p>
     <p>글 제목: {{ board.title }}</p>
-    <p>글 작성자: {{ board.user.username }}</p>
     <p>글 내용: {{ board.content }}</p>
     <p>글 생성시각: {{ board.created_at }}</p>
     <p>글 수정시각: {{ board.updated_at }}</p>
