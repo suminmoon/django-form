@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
 # 밑에 내가 만든 login 함수와 이름이 겹쳐서 이름을 지정해주기
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
 @require_GET
@@ -14,12 +14,12 @@ def signup(request):
 
     if request.method == 'POST':
         # 사용자 회원가입 로직
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():   # form 이 유효하다면 저장
             user = form.save()
             return redirect('boards:index', user)
     else:  # GET accounts/signup/
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {'form': form}
     return render(request, 'accounts/signup.html', context)  # 회원가입이 안 되었을 때 다시 로그인 페이지 보여주기
 
