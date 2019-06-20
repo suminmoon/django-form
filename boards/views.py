@@ -32,10 +32,13 @@ def create(request):
 @require_GET
 def detail(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
+    #  Board 를 참조하고 있는 모든 댓글
+    comments = board.comment_set.order_by('-pk')
     comment_form = CommentForm()
     context = {
         'board': board,
         'comment_form': comment_form,
+        'comments': comments,
     }
     return render(request, 'boards/detail.html', context)
 
@@ -45,6 +48,8 @@ def detail(request, board_pk):
 def delete(request, board_pk):
     # 특정 보드를 불러와서 삭제한다.
     board = get_object_or_404(Board, pk=board_pk)
+    if request.user !=board.user:
+        return redirect('boards:detail', board_pk)
     board.delete()
     return redirect('boards:index')
 
@@ -75,6 +80,8 @@ def update(request, board_pk):
 
 @require_POST
 def comments_create(request, board_pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     # 댓글 작성 로직
     comment_form = CommentForm(request.POST)  # modelform 에 사용자 입력을 받음
     if comment_form.is_valid():
@@ -87,4 +94,21 @@ def comments_create(request, board_pk):
         comment.save()
     return redirect('boards:detail', board_pk)
 
+
+@require_POST
+def comments_delete(request, board_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if comment.user == request.user:
+        comment.delete()
+    return redirect('boards:detail', board_pk)
+
+
+def like(request, board_pk):
+    board = get_object_or_404(Board, pk=board_pk)
+    user = request.user
+    if user in board.like_users.all():
+        board.like_users.remove(user)
+    else:
+        board.like_users.add(user)
+    return redirect('boards:detail', board_pk)
 
